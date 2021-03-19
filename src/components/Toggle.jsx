@@ -1,13 +1,14 @@
 import { React, Component } from "react";
+import Button from 'react-bootstrap/Button';
 
 class Toggle extends Component {
     render() {
         return (
-            <button 
-                className={this.props.state === 'checked' ? 'toggleChecked' : 'toggle'}
+            <Button 
+                variant={this.props.isToggleOn ? 'primary' : 'outline-primary'}
                 onClick={() => this.props.onStateChanged(this.props.value)}>
-                {this.props.caption} {this.props.state}
-            </button>
+                {this.props.caption} {this.props.isToggleOn}
+            </Button>
         );
     }
 }

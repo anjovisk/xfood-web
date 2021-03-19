@@ -1,21 +1,20 @@
 import { Component } from 'react';
+import { ButtonGroup } from 'react-bootstrap';
 import Toggle from './Toggle';
 
 class CategoryFilter extends Component {
     render() {
         const categories = this.props.categories.slice().map(category =>
-            <li key={category.value}>
             <Toggle 
                 value={category.value} 
                 caption={category.name}
-                state={category.isSelected ? "checked" : "unchecked"}
+                isToggleOn={category.isSelected}
                 onStateChanged={this.props.onCategoriesChanged}/>
-            </li>
         );
         return (
-            <ul>
+            <ButtonGroup toggle className="flex-wrap">
                 {categories}
-            </ul>
+            </ButtonGroup>
         );
     }
 }

@@ -1,13 +1,18 @@
 import { Component } from 'react';
+import { Card, Button } from 'react-bootstrap';
 
 class Food extends Component {
     render() {
         return(
-            <article>
-                <h2>{ this.props.food.name }</h2>
-                <p>{ this.props.food.categories.map(category => category.name).join(',') }</p>
-                <p>{ this.props.food.description }</p>
-            </article>
+            <Card border="primary" style={{ maxWidth: '35rem', height: '35rem' }} as="article">
+                <Card.Img variant="top" src={ this.props.food.image.default } />
+                <Card.Body>
+                    <Card.Title>{ this.props.food.name }</Card.Title>
+                    <Card.Subtitle>{ this.props.food.categories.map(category => category.name).join(',') }</Card.Subtitle>
+                    <Card.Text>{ this.props.food.description }</Card.Text>
+                    <Button variant="primary">Go</Button>
+                </Card.Body>
+            </Card>
         );
     }
 }

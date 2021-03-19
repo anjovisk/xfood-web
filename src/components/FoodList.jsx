@@ -2,6 +2,7 @@ import { Component } from 'react';
 import FoodFilter from './FoodFilter';
 import Food from './Food';
 import { categories as categoriesMock, foods as foodsMock } from '../mocks/data';
+import { CardColumns, Col, Container, Row } from 'react-bootstrap';
 
 class Pratos extends Component {
     constructor(props) {
@@ -46,19 +47,27 @@ class Pratos extends Component {
                     || food.name.toUpperCase().indexOf(this.state.filterExpression.toUpperCase()) !== -1
                 return categoryOk && filterExpressionOk;
         }).map(food =>
-            <li key={food.id}>
-                <Food food={food}/>
-            </li>
+            <Food food={food}/>
         );
         return (
-            <section>
-                <FoodFilter 
-                    filterExpression={ this.state.filterExpression }
-                    onFilterExpressionChanged={ this.onFilterExpressionChanged }
-                    categories={ this.state.categories } 
-                    onCategoriesChanged={ this.onCategoriesChanged }/>
-                { foods }
-            </section>
+            <Container fluid="md" as="section">
+                <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
+                    <Col>
+                        <FoodFilter 
+                            filterExpression={ this.state.filterExpression }
+                            onFilterExpressionChanged={ this.onFilterExpressionChanged }
+                            categories={ this.state.categories } 
+                            onCategoriesChanged={ this.onCategoriesChanged }/>
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
+                    <Col>
+                        <CardColumns>
+                            {foods}
+                        </CardColumns>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }

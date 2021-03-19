@@ -1,3 +1,6 @@
+var img_feijoada = require('../images/food/feijoada.jpg');
+var img_food = require('../images/food/food.jpg');
+
 export const categories = [
     {
       value: 'brasileira',
@@ -14,6 +17,34 @@ export const categories = [
     {
         value: 'chinesa',
         name: 'Chinesa'
+    },
+    {
+        value: 'chinesa1',
+        name: 'Chinesa1'
+    },
+    {
+        value: 'chinesa2',
+        name: 'Chinesa2'
+    },
+    {
+        value: 'chinesa3',
+        name: 'Chinesa3'
+    },
+    {
+        value: 'chinesa4',
+        name: 'Chinesa4'
+    },
+    {
+        value: 'chinesa5',
+        name: 'Chinesa5'
+    },
+    {
+        value: 'chinesa6',
+        name: 'Chinesa6'
+    },
+    {
+        value: 'chinesa7',
+        name: 'Chinesa7'
     }
 ];
 
@@ -21,6 +52,7 @@ export const foods = [
     {
         id: 1,
         name: "Feijoada",
+        image: img_feijoada,
         categories: [{
             value: 'brasileira',
             name: 'Brasileira'
@@ -29,6 +61,7 @@ export const foods = [
     },
     {
         id: 2,
+        image: img_food,
         name: "Temaki",
         categories: [{
             value: 'japonesa',
@@ -38,6 +71,7 @@ export const foods = [
     },
     {
         id: 3,
+        image: img_food,
         name: "Tropeiro",
         categories: [{
             value: 'brasileira',
@@ -47,6 +81,7 @@ export const foods = [
     },
     {
         id: 4,
+        image: img_food,
         name: "Lasanha",
         categories: [{
             value: 'massas',
@@ -56,6 +91,7 @@ export const foods = [
     },
     {
         id: 5,
+        image: img_food,
         name: "Frango Xadrez",
         categories: [{
             value: 'chinesa',
