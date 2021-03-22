@@ -5,7 +5,7 @@ import Toggle from './Toggle';
 class CategoryFilter extends Component {
     render() {
         const categories = this.props.categories.slice().map(category =>
-            <Toggle 
+            <Toggle key={category.value}
                 value={category.value} 
                 caption={category.name}
                 isToggleOn={category.isSelected}

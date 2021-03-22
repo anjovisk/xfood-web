@@ -18,7 +18,7 @@ class FoodFilter extends Component {
                 </Row>
                 <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
                     <Col>
-                        <CategoryFilter 
+                        <CategoryFilter
                                 categories={this.props.categories}
                                 onCategoriesChanged={ this.props.onCategoriesChanged }/>
                     </Col>
