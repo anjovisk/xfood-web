@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import FoodFilter from './FoodFilter';
-import Food from './Food';
+import FoodCard from './FoodCard';
 import { CardColumns, Col, Container, Row } from 'react-bootstrap';
 
 class Pratos extends Component {
@@ -36,10 +36,10 @@ class Pratos extends Component {
 
     componentDidMount() {
         Promise.all([
-            fetch("https://4c7c2cc2-0a07-43dc-bac7-63a47e79809f.mock.pstmn.io/public/v1/foods")
+            fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foods")
                 .then(res => res.json() )
                 .then(result => result, error => error),
-            fetch("https://4c7c2cc2-0a07-43dc-bac7-63a47e79809f.mock.pstmn.io/public/v1/foodCategories").then(res => { return res.json(); })
+            fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foodCategories").then(res => { return res.json(); })
         ]).then(([foods, foodCategories]) => {
             if (foods.error || foodCategories.error) {
                 this.setState({
@@ -78,7 +78,7 @@ class Pratos extends Component {
                         || food.name.toUpperCase().indexOf(this.state.filterExpression.toUpperCase()) !== -1
                     return categoryOk && filterExpressionOk;
             }).map(food =>
-                <Food key={food.id} food={food}/>
+                <FoodCard key={food.id} food={food}/>
             );
             return (
                 <Container fluid="md" as="section">
