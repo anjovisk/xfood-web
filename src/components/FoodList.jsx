@@ -1,40 +1,28 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import FoodFilter from './FoodFilter';
 import FoodCard from './FoodCard';
 import { CardColumns, Col, Container, Row } from 'react-bootstrap';
 
-class Pratos extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            foods: [],
-            isLoaded: false,
-            error: null,
-            categories: [],
-            filterExpression: ""
-        };
-        this.onCategoriesChanged = this.onCategoriesChanged.bind(this);
-        this.onFilterExpressionChanged = this.onFilterExpressionChanged.bind(this);
-    }
+const Pratos = () => {
+    const [data, setData] = useState({ foods: [], categories: [], isLoaded: false, error: null});
+    const [filterExpression, setFilterExpression] = useState('');
     
-    onCategoriesChanged(value) {
-        const categories = this.state.categories.slice();
-        categories.forEach(category => {
+    const onCategoriesChanged = (value) => {
+        const categoriesAux = data.categories.slice();
+        categoriesAux.forEach(category => {
             if (category.value === value) {
               category.isSelected = !category.isSelected;
               return;
             }
         });
-        this.setState({categories: categories});
+        setData({...data, categories: categoriesAux});
     }
 
-    onFilterExpressionChanged(e) {
-        this.setState({
-            filterExpression: e.target.value
-        });
+    const onFilterExpressionChanged = (e) => {
+        setFilterExpression(e.target.value);
     }
 
-    componentDidMount() {
+    useEffect(() => {
         Promise.all([
             fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foods")
                 .then(res => res.json() )
@@ -42,12 +30,12 @@ class Pratos extends Component {
             fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foodCategories").then(res => { return res.json(); })
         ]).then(([foods, foodCategories]) => {
             if (foods.error || foodCategories.error) {
-                this.setState({
+                setData({
                     isLoaded: true,
                     error: foods.error || foodCategories.error
                 });
             } else {
-                this.setState({
+                setData({
                     isLoaded: true,
                     foods: foods,
                     categories: foodCategories.slice().map((category) => {
@@ -60,47 +48,44 @@ class Pratos extends Component {
                 });
             }
         });
-    }
+    }, []);
     
-    render() {
-        const { error, isLoaded, foods } = this.state;
-        if (error) {
-            return <div>Error: {error.message}</div>;
-        }
-        if (!isLoaded) {
-            return <div>Loading...</div>
-        } else {
-            const selectedCategories = this.state.categories.filter(category => category.isSelected);
-            const foodsComponent = foods.filter(food => {
-                    let categoryOk = selectedCategories.length === 0
-                        || food.categories.filter(category => selectedCategories.some(selectedCategory => selectedCategory.value === category.value)).length > 0;
-                    let filterExpressionOk = this.state.filterExpression === ''
-                        || food.name.toUpperCase().indexOf(this.state.filterExpression.toUpperCase()) !== -1
-                    return categoryOk && filterExpressionOk;
-            }).map(food =>
-                <FoodCard key={food.id} food={food}/>
-            );
-            return (
-                <Container fluid="md" as="section">
-                    <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
-                        <Col>
-                            <FoodFilter 
-                                filterExpression={ this.state.filterExpression }
-                                onFilterExpressionChanged={ this.onFilterExpressionChanged }
-                                categories={ this.state.categories } 
-                                onCategoriesChanged={ this.onCategoriesChanged }/>
-                        </Col>
-                    </Row>
-                    <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
-                        <Col>
-                            <CardColumns>
-                                {foodsComponent}
-                            </CardColumns>
-                        </Col>
-                    </Row>
-                </Container>
-            );
-        }
+    if (data.error) {
+        return <div>Error: {data.error.message}</div>;
+    }
+    if (!data.isLoaded) {
+        return <div>Loading...</div>
+    } else {
+        const selectedCategories = data.categories.filter(category => category.isSelected);
+        const foodsComponent = data.foods.filter(food => {
+                let categoryOk = selectedCategories.length === 0
+                    || food.categories.filter(category => selectedCategories.some(selectedCategory => selectedCategory.value === category.value)).length > 0;
+                let filterExpressionOk = filterExpression === ''
+                    || food.name.toUpperCase().indexOf(filterExpression.toUpperCase()) !== -1
+                return categoryOk && filterExpressionOk;
+        }).map(food =>
+            <FoodCard key={food.id} food={food}/>
+        );
+        return (
+            <Container fluid="md" as="section">
+                <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
+                    <Col>
+                        <FoodFilter 
+                            filterExpression={ filterExpression }
+                            onFilterExpressionChanged={ onFilterExpressionChanged }
+                            categories={ data.categories } 
+                            onCategoriesChanged={ onCategoriesChanged }/>
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
+                    <Col>
+                        <CardColumns>
+                            {foodsComponent}
+                        </CardColumns>
+                    </Col>
+                </Row>
+            </Container>
+        );
     }
 }
 

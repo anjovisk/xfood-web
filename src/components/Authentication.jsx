@@ -1,5 +1,5 @@
 import { React, useContext, useState } from 'react';
-import { Alert, Button, Form } from 'react-bootstrap';
+import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
 import { AuthContext } from './context/auth-context';
 
 export default Authentication;
@@ -16,12 +16,15 @@ function Authentication() {
 }
 
 function LogoffControl() {
-    const { handleLogoff } = useContext(AuthContext);
+    const { authInfo, handleLogoff } = useContext(AuthContext);
 
     return (
-        <>
-            <button onClick={ handleLogoff }>Exit</button>
-        </>
+        <Row>
+            <Col>
+                <span>Helo, { authInfo.user.firstName }</span>
+                <Button variant="link" onClick={ handleLogoff }>Exit</Button>
+            </Col>
+        </Row>
     );
 }
 
@@ -31,32 +34,33 @@ function LoginControl() {
 
     return (
         <Form onSubmit={handleSubmit(() => handleLogin(values))}>
-            <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email"
-                    name="email"
-                    onChange={handleChange}
-                />
-                { error 
-                    ? (
-                        <Alert variant="danger">
-                            { error.message }
-                        </Alert>
-                    )
-                    : <></>
-                }
-            </Form.Group>
-
-            <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" 
-                    name="password"
-                    onChange={handleChange}
-                />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Login
-            </Button>
+            <Form.Row controlId="formBasicEmail">
+                <Col>
+                    <Form.Control size="sm"
+                        type="email" placeholder="Enter email"
+                        name="email" onChange={handleChange}
+                    />
+                    { error 
+                        ? (
+                            <Alert variant="danger">
+                                { error.message }
+                            </Alert>
+                        )
+                        : <></>
+                    }
+                </Col>
+                <Col>
+                    <Form.Control size="sm"
+                        type="password" placeholder="Password" 
+                        name="password" onChange={handleChange}
+                    />
+                </Col>
+                <Col>
+                    <Button variant="primary" type="submit" size="sm">
+                        Login
+                    </Button>
+                </Col>
+            </Form.Row>
         </Form>
     );
 }
