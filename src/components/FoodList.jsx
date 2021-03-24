@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import FoodFilter from './FoodFilter';
 import FoodCard from './FoodCard';
-import { CardColumns, Col, Container, Row } from 'react-bootstrap';
+import { Badge, CardColumns, Col, Container, Row, Spinner } from 'react-bootstrap';
 
 const Pratos = () => {
     const [data, setData] = useState({ foods: [], categories: [], isLoaded: false, error: null});
@@ -51,10 +51,27 @@ const Pratos = () => {
     }, []);
     
     if (data.error) {
-        return <div>Error: {data.error.message}</div>;
+        return (<div>Error: {data.error.message}</div>);
     }
     if (!data.isLoaded) {
-        return <div>Loading...</div>
+        return (
+            <Container>
+                <Row className="justify-content-md-center">
+                    <Col md="auto">
+                        <Spinner animation="border" variant="success" role="status"/>
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                    <Col md="auto">
+                        <h3>
+                            <Badge pill variant="success">
+                                Loading...
+                            </Badge>
+                        </h3>
+                    </Col>
+                </Row>
+            </Container>
+        );
     } else {
         const selectedCategories = data.categories.filter(category => category.isSelected);
         const foodsComponent = data.foods.filter(food => {

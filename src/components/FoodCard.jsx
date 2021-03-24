@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import { Card, Button, Row, Col, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
 import AuthContext from './context/auth-context';
 
 class Food extends Component {
@@ -69,13 +69,29 @@ function FoodCardFooter(props) {
     if (!props.isAuthenticated) {
         return (<></>);
     }
-    let footerContent = props.isAdmin 
-        ? (
-            <Button variant="primary">Settings</Button>
-        ) 
-        : (
-            <Button variant="primary">Order</Button>
+    let footerContent = null; 
+    if (props.isAdmin) {
+        const popover = (
+            <Popover id="popover-food-settings">
+                <Popover.Title as="h3">{props.food.name}</Popover.Title>
+                <Popover.Content>
+                    <ButtonGroup vertical>
+                        <Button>{props.food.status.value === "available" ? "Turn unavailable" : "Turn available"}</Button>
+                        <Button>Change</Button>
+                        <Button>Remove</Button>
+                    </ButtonGroup>
+                </Popover.Content>
+            </Popover>
         );
+        footerContent = (
+            <OverlayTrigger trigger="click" placement="right" 
+                overlay={popover} rootClose="true">
+                <Button variant="success">Settings</Button>
+            </OverlayTrigger>
+        );
+    } else {
+        footerContent = (<Button variant="primary">Order</Button>);
+    }
     return (
         <Card.Footer>
             {footerContent}

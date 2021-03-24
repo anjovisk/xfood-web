@@ -34,7 +34,7 @@ function LoginControl() {
 
     return (
         <Form onSubmit={handleSubmit(() => handleLogin(values))}>
-            <Form.Row controlId="formBasicEmail">
+            <Form.Row controlid="formLogin">
                 <Col>
                     <Form.Control size="sm"
                         type="email" placeholder="Enter email"
