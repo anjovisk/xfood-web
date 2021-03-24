@@ -1,6 +1,8 @@
 import { Component } from 'react';
-import { Card, Button, Row, Col, OverlayTrigger, Popover, ButtonGroup } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import AuthContext from './context/auth-context';
+import { FoodCardFooter as FoodCardFooterAdm } from './adm/FoodCardFooter';
+import { FoodCardFooter as FoodCardFooterUser } from './FoodCardFooter';
 
 class Food extends Component {
     render() {
@@ -20,6 +22,7 @@ class Food extends Component {
                             food={this.props.food}
                             isAuthenticated={authInfo.isAuthenticated}
                             isAdmin={authInfo.isAuthenticated && authInfo.user.isAdmin}
+                            onFoodStatusChanged={ this.props.onFoodStatusChanged }
                         />
                     </Card>
                 }
@@ -69,33 +72,16 @@ function FoodCardFooter(props) {
     if (!props.isAuthenticated) {
         return (<></>);
     }
-    let footerContent = null; 
     if (props.isAdmin) {
-        const popover = (
-            <Popover id="popover-food-settings">
-                <Popover.Title as="h3">{props.food.name}</Popover.Title>
-                <Popover.Content>
-                    <ButtonGroup vertical>
-                        <Button>{props.food.status.value === "available" ? "Turn unavailable" : "Turn available"}</Button>
-                        <Button>Change</Button>
-                        <Button>Remove</Button>
-                    </ButtonGroup>
-                </Popover.Content>
-            </Popover>
+        return (
+            <FoodCardFooterAdm
+                food={props.food}
+                onFoodStatusChanged={props.onFoodStatusChanged}
+            />
         );
-        footerContent = (
-            <OverlayTrigger trigger="click" placement="right" 
-                overlay={popover} rootClose="true">
-                <Button variant="success">Settings</Button>
-            </OverlayTrigger>
-        );
-    } else {
-        footerContent = (<Button variant="primary">Order</Button>);
     }
     return (
-        <Card.Footer>
-            {footerContent}
-        </Card.Footer>
+        <FoodCardFooterUser />
     );
 }
 

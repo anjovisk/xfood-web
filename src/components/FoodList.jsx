@@ -1,11 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import FoodFilter from './FoodFilter';
 import FoodCard from './FoodCard';
 import { Badge, CardColumns, Col, Container, Row, Spinner } from 'react-bootstrap';
+import AuthContext from './context/auth-context';
+
+const defaultData = { foods: [], categories: [], error: null};
 
 const Pratos = () => {
-    const [data, setData] = useState({ foods: [], categories: [], isLoaded: false, error: null});
+    const [data, setData] = useState(defaultData);
+    const [isLoaded, setLoaded] = useState(false);
     const [filterExpression, setFilterExpression] = useState('');
+    const {authInfo} = useContext(AuthContext);
     
     const onCategoriesChanged = (value) => {
         const categoriesAux = data.categories.slice();
@@ -16,13 +21,26 @@ const Pratos = () => {
             }
         });
         setData({...data, categories: categoriesAux});
-    }
+    };
 
     const onFilterExpressionChanged = (e) => {
         setFilterExpression(e.target.value);
-    }
+    };
+
+    const onFoodStatusChanged = (id, status) => {
+        const foodsAux = data.foods.slice();
+        foodsAux.splice();
+        foodsAux.forEach(food => {
+            if (food.id === id) {
+                food.status = status;
+                return;
+            }
+        });
+        setData({...data, foods: foodsAux});
+    };
 
     useEffect(() => {
+        setLoaded(false);
         Promise.all([
             fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foods")
                 .then(res => res.json() )
@@ -31,13 +49,14 @@ const Pratos = () => {
         ]).then(([foods, foodCategories]) => {
             if (foods.error || foodCategories.error) {
                 setData({
-                    isLoaded: true,
                     error: foods.error || foodCategories.error
                 });
             } else {
                 setData({
                     isLoaded: true,
-                    foods: foods,
+                    foods: authInfo.isAuthenticated && authInfo.user.isAdmin
+                        ? foods
+                        : foods.filter(food => food.status.value === "available"),
                     categories: foodCategories.slice().map((category) => {
                         return {
                             "value": category.value,
@@ -47,13 +66,14 @@ const Pratos = () => {
                     })
                 });
             }
+            setLoaded(true);
         });
-    }, []);
-    
+    }, [authInfo]);
+
     if (data.error) {
         return (<div>Error: {data.error.message}</div>);
     }
-    if (!data.isLoaded) {
+    if (!isLoaded) {
         return (
             <Container>
                 <Row className="justify-content-md-center">
@@ -81,7 +101,9 @@ const Pratos = () => {
                     || food.name.toUpperCase().indexOf(filterExpression.toUpperCase()) !== -1
                 return categoryOk && filterExpressionOk;
         }).map(food =>
-            <FoodCard key={food.id} food={food}/>
+            <FoodCard key={food.id} food={food}
+                onFoodStatusChanged={ onFoodStatusChanged }
+            />
         );
         return (
             <Container fluid="md" as="section">
