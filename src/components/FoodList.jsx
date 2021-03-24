@@ -41,11 +41,12 @@ const Pratos = () => {
 
     useEffect(() => {
         setLoaded(false);
+        //Postman mock url: https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io
         Promise.all([
-            fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foods")
+            fetch("http://localhost:3001/public/v1/foods")
                 .then(res => res.json() )
                 .then(result => result, error => error),
-            fetch("https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io/public/v1/foodCategories").then(res => { return res.json(); })
+            fetch("http://localhost:3001/public/v1/foodCategories").then(res => { return res.json(); })
         ]).then(([foods, foodCategories]) => {
             if (foods.error || foodCategories.error) {
                 setData({

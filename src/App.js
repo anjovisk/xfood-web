@@ -12,8 +12,6 @@ import {
 } from "react-router-dom";
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 
-//TODO: Criar popup com ações para alteração de status, exclusão e edição de pratos
-//TODO: Permitir alteração de status de pratos (sem chamar API, somente com os pratos em memória)
 //TODO: Criar exclusão de pratos (sem chamar API, somente com os pratos em memória)
 //TODO: Criar cadastro de pratos (sem chamar API, somente com os pratos em memória)
 //TODO: Estilizar rating e botões de ação
