@@ -26,9 +26,9 @@ export const ChangeFoodStatusButton = (props) => {
                     case 200:
                         return res.json();
                     case 404:
-                        throw Error("Food status could not be changed. Food not found.");
+                        throw Error("The food's status could not be changed. Food not found.");
                     default:
-                        throw Error("Food status could not be changed.");
+                        throw Error("The food's status could not be changed.");
                 }
             }
         ).then(

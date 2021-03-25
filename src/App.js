@@ -12,9 +12,9 @@ import {
 } from "react-router-dom";
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 
-//TODO: Criar exclusão de pratos (sem chamar API, somente com os pratos em memória)
 //TODO: Criar cadastro de pratos (sem chamar API, somente com os pratos em memória)
 //TODO: Estilizar rating e botões de ação
+//TODO: Retornar url da imagem na API
 
 export default function App() {
   return (

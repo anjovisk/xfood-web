@@ -23,6 +23,7 @@ class Food extends Component {
                             isAuthenticated={authInfo.isAuthenticated}
                             isAdmin={authInfo.isAuthenticated && authInfo.user.isAdmin}
                             onFoodStatusChanged={ this.props.onFoodStatusChanged }
+                            onFoodRemoved={ this.props.onFoodRemoved }
                         />
                     </Card>
                 }
@@ -77,6 +78,7 @@ function FoodCardFooter(props) {
             <FoodCardFooterAdm
                 food={props.food}
                 onFoodStatusChanged={props.onFoodStatusChanged}
+                onFoodRemoved={props.onFoodRemoved}
             />
         );
     }

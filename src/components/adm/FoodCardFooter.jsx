@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button, ButtonGroup, Card, Modal, OverlayTrigger, Popover, Spinner } from "react-bootstrap";
+import { Button, ButtonGroup, Card, Modal, OverlayTrigger, Popover } from "react-bootstrap";
 import ChangeFoodStatusButton from './ChangeFoodStatusButton';
+import DeleteFoodButton from './DeleteFoodButton';
 
 export const FoodCardFooter = (props) => {
     const [error, setError] = useState(null);
 
-    const onChangeFoodStatusError = (error) => {
+    const onError = (error) => {
         setError(error);
     };
 
@@ -17,10 +18,14 @@ export const FoodCardFooter = (props) => {
                     <ChangeFoodStatusButton
                         onFoodStatusChanged={props.onFoodStatusChanged}
                         food={props.food}
-                        onError={onChangeFoodStatusError}
+                        onError={onError}
                     />
                     <Button>Change</Button>
-                    <Button>Remove</Button>
+                    <DeleteFoodButton
+                        onFoodRemoved={props.onFoodRemoved}
+                        food={props.food}
+                        onError={onError}
+                    />
                 </ButtonGroup>
             </Popover.Content>
         </Popover>

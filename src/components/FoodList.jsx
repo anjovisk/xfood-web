@@ -39,8 +39,14 @@ const Pratos = () => {
         setData({...data, foods: foodsAux});
     };
 
-    useEffect(() => {
+    const onFoodRemoved = (id) => {
         setLoaded(false);
+    };
+
+    useEffect(() => {
+        if (isLoaded) {
+            return;
+        }
         //Postman mock url: https://5a99f513-7ded-4647-9a66-4c6eb540a270.mock.pstmn.io
         Promise.all([
             fetch("http://localhost:3001/public/v1/foods")
@@ -54,10 +60,7 @@ const Pratos = () => {
                 });
             } else {
                 setData({
-                    isLoaded: true,
-                    foods: authInfo.isAuthenticated && authInfo.user.isAdmin
-                        ? foods
-                        : foods.filter(food => food.status.value === "available"),
+                    foods: foods,
                     categories: foodCategories.slice().map((category) => {
                         return {
                             "value": category.value,
@@ -69,6 +72,10 @@ const Pratos = () => {
             }
             setLoaded(true);
         });
+    }, [isLoaded]);
+
+    useEffect(() => {
+        setLoaded(false);
     }, [authInfo]);
 
     if (data.error) {
@@ -95,7 +102,9 @@ const Pratos = () => {
         );
     } else {
         const selectedCategories = data.categories.filter(category => category.isSelected);
-        const foodsComponent = data.foods.filter(food => {
+        const foodsAux = authInfo.isAuthenticated && authInfo.user.isAdmin
+            ? data.foods : data.foods.filter(food => food.status.value === "available")
+        const foodsComponent = foodsAux.filter(food => {
                 let categoryOk = selectedCategories.length === 0
                     || food.categories.filter(category => selectedCategories.some(selectedCategory => selectedCategory.value === category.value)).length > 0;
                 let filterExpressionOk = filterExpression === ''
@@ -104,6 +113,7 @@ const Pratos = () => {
         }).map(food =>
             <FoodCard key={food.id} food={food}
                 onFoodStatusChanged={ onFoodStatusChanged }
+                onFoodRemoved={ onFoodRemoved }
             />
         );
         return (
