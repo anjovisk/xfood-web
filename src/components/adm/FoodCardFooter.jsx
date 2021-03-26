@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button, ButtonGroup, Card, Modal, OverlayTrigger, Popover } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import ChangeFoodStatusButton from './ChangeFoodStatusButton';
 import DeleteFoodButton from './DeleteFoodButton';
 
 export const FoodCardFooter = (props) => {
     const [error, setError] = useState(null);
+    const history = useHistory();
 
     const onError = (error) => {
         setError(error);
@@ -20,7 +22,7 @@ export const FoodCardFooter = (props) => {
                         food={props.food}
                         onError={onError}
                     />
-                    <Button>Change</Button>
+                    <Button onClick={() => history.push(`/foods/${props.food.id}`)}>Change</Button>
                     <DeleteFoodButton
                         onFoodRemoved={props.onFoodRemoved}
                         food={props.food}

@@ -1,5 +1,5 @@
 import { React, useContext, useState } from 'react';
-import { Alert, Button, Col, Form, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
 import { AuthContext } from './context/auth-context';
 
 export default Authentication;
@@ -29,39 +29,47 @@ function LogoffControl() {
 }
 
 function LoginControl() {
-    const [values, error, handleChange, handleSubmit] = useForm();
+    const [values, error, setError, handleChange, handleSubmit] = useForm();
     const {handleLogin} = useContext(AuthContext);
 
     return (
-        <Form onSubmit={handleSubmit(() => handleLogin(values))}>
-            <Form.Row controlid="formLogin">
+        <Container>
+            <Row>
                 <Col>
-                    <Form.Control size="sm"
-                        type="email" placeholder="Enter email"
-                        name="email" onChange={handleChange}
-                    />
+                    <Form inline onSubmit={handleSubmit(() => handleLogin(values))}>
+                        <InputGroup className="mb-2 mr-sm-2" size="sm">
+                            <InputGroup.Prepend>
+                                <InputGroup.Text >@</InputGroup.Text>
+                            </InputGroup.Prepend>
+                            <FormControl autoComplete="off" id="loginUserName" isInvalid={error}
+                                type="email" placeholder="email" size="sm"
+                                name="email" onChange={handleChange} 
+                            />
+                        </InputGroup>
+                        <FormControl autoComplete="off" className="mb-2 mr-sm-2" size="sm" isInvalid={error}
+                            type="password" placeholder="password" 
+                            name="password" onChange={handleChange}
+                        />
+                        <Button variant="primary" type="submit" className="mb-2" size="sm">
+                            Login
+                        </Button>
+                    </Form>
+                </Col>
+            </Row>
+            <Row>
+                <Col>
                     { error 
                         ? (
-                            <Alert variant="danger">
+                            <Alert variant="danger" dismissible 
+                                onClose={() => { setError(null) }}>
                                 { error.message }
                             </Alert>
                         )
                         : <></>
                     }
                 </Col>
-                <Col>
-                    <Form.Control size="sm"
-                        type="password" placeholder="Password" 
-                        name="password" onChange={handleChange}
-                    />
-                </Col>
-                <Col>
-                    <Button variant="primary" type="submit" size="sm">
-                        Login
-                    </Button>
-                </Col>
-            </Form.Row>
-        </Form>
+            </Row>
+        </Container>
     );
 }
 
@@ -84,5 +92,5 @@ const useForm = () => {
         event.preventDefault();
     };
 
-    return [values, error, handleChange, handleSubmit];
+    return [values, error, setError, handleChange, handleSubmit];
 };

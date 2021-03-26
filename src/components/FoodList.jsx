@@ -1,8 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
 import FoodFilter from './FoodFilter';
 import FoodCard from './FoodCard';
-import { Badge, CardColumns, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { CardColumns, Col, Container, Row } from 'react-bootstrap';
 import AuthContext from './context/auth-context';
+import FoodListControls from './adm/FoodListControls';
+import Loading from './Loading';
 
 const defaultData = { foods: [], categories: [], error: null};
 
@@ -82,24 +84,7 @@ const Pratos = () => {
         return (<div>Error: {data.error.message}</div>);
     }
     if (!isLoaded) {
-        return (
-            <Container>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <Spinner animation="border" variant="success" role="status"/>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col md="auto">
-                        <h3>
-                            <Badge pill variant="success">
-                                Loading...
-                            </Badge>
-                        </h3>
-                    </Col>
-                </Row>
-            </Container>
-        );
+        return (<Loading />);
     } else {
         const selectedCategories = data.categories.filter(category => category.isSelected);
         const foodsAux = authInfo.isAuthenticated && authInfo.user.isAdmin
@@ -118,9 +103,10 @@ const Pratos = () => {
         );
         return (
             <Container fluid="md" as="section">
+                <AdminControls authInfo={authInfo} />
                 <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
                     <Col>
-                        <FoodFilter 
+                        <FoodFilter
                             filterExpression={ filterExpression }
                             onFilterExpressionChanged={ onFilterExpressionChanged }
                             categories={ data.categories } 
@@ -137,6 +123,20 @@ const Pratos = () => {
             </Container>
         );
     }
+}
+
+function AdminControls() {
+    const { authInfo } = useContext(AuthContext);
+    if (!authInfo.isAuthenticated || !authInfo.user.isAdmin) {
+        return (<></>);
+    }
+    return (
+        <Row className="justify-content-md-center" style={{ marginTop: '20px' }}>
+            <Col>
+                <FoodListControls />  
+            </Col>
+        </Row>
+    );
 }
 
 export default Pratos;

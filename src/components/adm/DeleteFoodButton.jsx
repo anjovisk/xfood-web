@@ -14,8 +14,6 @@ export const DeleteFoodButton = (props) => {
                     return;
                 }
                 switch (res.status) {
-                    case 200:
-                        return res.json();
                     case 404:
                         throw Error("The food could not be removed. Food not found.");
                     default:

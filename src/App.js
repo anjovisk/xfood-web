@@ -11,10 +11,14 @@ import {
   Link
 } from "react-router-dom";
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import FoodForm from './components/adm/FoodForm';
 
-//TODO: Criar cadastro de pratos (sem chamar API, somente com os pratos em memória)
-//TODO: Estilizar rating e botões de ação
+//TODO: Criar API de login e utilizá-la
+//TODO: Salvar imagem do prato
+//TODO: Estilizar rating e permitir que avaliações sejam realizadas.
 //TODO: Retornar url da imagem na API
+//TODO: Criar microsserviço de pedidos
+//TODO: Permitir que clientes realizem pedidos
 
 export default function App() {
   return (
@@ -37,6 +41,9 @@ export default function App() {
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Switch>
+            <Route path="/foods/:id">
+              <FoodForm />
+            </Route>
             <Route path="/foods">
               <FoodList/>
             </Route>
